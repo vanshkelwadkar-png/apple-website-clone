@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apple</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif; background: #fff; color: #1d1d1f; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(22,22,23,0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 22px; height: 44px;
+  }
+  nav .logo { color: #f5f5f7; font-size: 18px; }
+  nav ul { display: flex; gap: 20px; list-style: none; }
+  nav ul a { color: #f5f5f7; text-decoration: none; font-size: 12px; opacity: 0.85; transition: opacity 0.2s; }
+  nav ul a:hover { opacity: 1; }
+  nav .nav-icons { display: flex; gap: 18px; }
+  nav .nav-icons a { color: #f5f5f7; font-size: 14px; opacity: 0.85; }
+
+  .hero {
+    background: #000;
+    text-align: center;
+    padding: 80px 20px 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero-eyebrow { color: #0071e3; font-size: 17px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .hero h1 { color: #f5f5f7; font-size: clamp(48px, 8vw, 80px); font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin-bottom: 10px; }
+  .hero .subtext { color: #a1a1a6; font-size: clamp(17px, 3vw, 24px); font-weight: 400; letter-spacing: -0.01em; margin-bottom: 28px; }
+  .hero-ctas { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { background: #0071e3; color: #fff; border: none; border-radius: 980px; padding: 10px 22px; font-size: 17px; font-weight: 400; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+  .btn-primary:hover { background: #0077ed; }
+  .btn-secondary { color: #0071e3; background: transparent; border: none; font-size: 17px; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 4px; }
+  .btn-secondary::after { content: '›'; }
+
+  .hero-phone {
+    margin: 40px auto 0;
+    width: 260px; height: 530px;
+    background: linear-gradient(145deg, #2a2a2e 0%, #1a1a1e 40%, #111114 100%);
+    border-radius: 50px;
+    border: 1.5px solid #3a3a3e;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,113,227,0.15), 0 0 0 0.5px #555;
+  }
+  .hero-phone::before {
+    content: '';
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 34px;
+    background: #000; border-radius: 20px;
+  }
+  .hero-phone-screen {
+    position: absolute; inset: 2px;
+    border-radius: 48px; overflow: hidden;
+    background: linear-gradient(160deg, #0a0a1a 0%, #0d1230 50%, #0a1520 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .hero-phone-screen .chip { color: #0071e3; font-size: 22px; font-weight: 700; letter-spacing: -0.04em; }
+  .hero-phone-screen .chip-sub { color: #a1a1a6; font-size: 11px; margin-top: 4px; }
+  .glow-ring {
+    position: absolute; width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,113,227,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .product-grid {
+    background: #f5f5f7;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 1000px; margin: 0 auto;
+  }
+  .product-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 32px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    min-height: 200px;
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  }
+  .product-card:hover { transform: scale(1.01); }
+  .product-card.dark { background: #1d1d1f; }
+  .product-card .cat { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #6e6e73; margin-bottom: 4px; }
+  .product-card.dark .cat { color: #a1a1a6; }
+  .product-card h2 { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 4px; }
+  .product-card.dark h2 { color: #f5f5f7; }
+  .product-card .tagline { font-size: 13px; color: #6e6e73; margin-bottom: 12px; }
+  .product-card.dark .tagline { color: #a1a1a6; }
+  .card-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .card-link { color: #0071e3; font-size: 13px; text-decoration: none; }
+  .card-link:hover { text-decoration: underline; }
+  .card-link.light { color: #2997ff; }
+  .product-emoji { font-size: 56px; margin-bottom: 8px; }
+  .product-card.span2 { grid-column: span 2; }
+
+  .marquee-section { background: #000; padding: 60px 20px; text-align: center; }
+  .marquee-section h2 { color: #f5f5f7; font-size: clamp(28px, 5vw, 48px); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 6px; }
+  .marquee-section p { color: #a1a1a6; font-size: 17px; margin-bottom: 32px; }
+  .feature-chips { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 680px; margin: 0 auto; }
+  .feature-chip {
+    background: #1d1d1f; color: #f5f5f7;
+    border: 0.5px solid #3a3a3e;
+    border-radius: 980px; padding: 8px 18px;
+    font-size: 14px;
+  }
+
+  .accessories {
+    background: #f5f5f7; padding: 40px 20px;
+    text-align: center;
+  }
+  .accessories h2 { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 24px; }
+  .acc-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; justify-content: center; }
+  .acc-card {
+    min-width: 160px; background: #fff; border-radius: 14px;
+    padding: 20px 16px; text-align: center; scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+  .acc-card .acc-emoji { font-size: 40px; margin-bottom: 8px; }
+  .acc-card .acc-name { font-size: 14px; font-weight: 600; letter-spacing: -0.02em; }
+  .acc-card .acc-price { font-size: 12px; color: #6e6e73; margin-top: 4px; }
+
+  footer {
+    background: #f5f5f7; border-top: 0.5px solid #d2d2d7;
+    padding: 32px 22px 16px;
+  }
+  .footer-top { font-size: 12px; color: #6e6e73; margin-bottom: 16px; line-height: 1.6; }
+  .footer-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 24px; margin-bottom: 24px; }
+  .footer-col h4 { font-size: 12px; font-weight: 600; color: #1d1d1f; margin-bottom: 10px; }
+  .footer-col a { display: block; font-size: 12px; color: #6e6e73; text-decoration: none; margin-bottom: 6px; }
+  .footer-col a:hover { text-decoration: underline; }
+  .footer-bottom { border-top: 0.5px solid #d2d2d7; padding-top: 12px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .footer-bottom a { font-size: 11px; color: #6e6e73; text-decoration: none; }
+  .footer-bottom a:hover { text-decoration: underline; }
+  .footer-bottom span { font-size: 11px; color: #6e6e73; margin-left: auto; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">&#xf8ff;</div>
+  <ul>
+    <li><a href="#">Store</a></li>
+    <li><a href="#">Mac</a></li>
+    <li><a href="#">iPad</a></li>
+    <li><a href="#">iPhone</a></li>
+    <li><a href="#">Watch</a></li>
+    <li><a href="#">Vision</a></li>
+    <li><a href="#">AirPods</a></li>
+    <li><a href="#">TV &amp; Home</a></li>
+    <li><a href="#">Entertainment</a></li>
+    <li><a href="#">Support</a></li>
+  </ul>
+  <div class="nav-icons">
+    <a href="#">&#x1F50D;</a>
+    <a href="#">&#x1F6D2;</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="glow-ring"></div>
+  <p class="hero-eyebrow">New</p>
+  <h1>iPhone 17 Pro</h1>
+  <p class="subtext">Thinner. Faster. Titanium.</p>
+  <div class="hero-ctas">
+    <a href="#" class="btn-primary">Learn more</a>
+    <a href="#" class="btn-secondary">Buy</a>
+  </div>
+  <div class="hero-phone">
+    <div class="hero-phone-screen">
+      <div class="chip">A19 Pro</div>
+      <div class="chip-sub">NEXT&#8209;GENERATION CHIP</div>
+    </div>
+  </div>
+</section>
+
+<section class="product-grid">
+  <div class="product-card dark">
+    <div>
+      <div class="cat">MacBook Pro</div>
+      <h2>The ultimate<br>pro laptop.</h2>
+      <div class="tagline">M4 Max chip. Now with more memory.</div>
+    </div>
+    <div>
+      <div class="product-emoji">💻</div>
+      <div class="card-links">
+        <a href="#" class="card-link light">Learn more</a>
+        <a href="#" class="card-link light">Buy</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <div>
+      <div class="cat">iPad Pro</div>
+      <h2>Impossibly thin.<br>Incredibly capable.</h2>
+      <div class="tagline">The thinnest Apple product ever.</div>
+    </div>
+    <div>
+      <div class="product-emoji">📱</div>
+      <div class="card-links">
+        <a href="#" class="card-link">Learn more</a>
+        <a href="#" class="card-link">Buy</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card dark">
+    <div>
+      <div class="cat">Apple Watch Series 10</div>
+      <h2>Thinnest.<br>Biggest display.</h2>
+      <div class="tagline">Goodbye, charging anxiety.</div>
+    </div>
+    <div>
+      <div class="product-emoji">⌚</div>
+      <div class="card-links">
+        <a href="#" class="card-link light">Learn more</a>
+        <a href="#" class="card-link light">Buy</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <div>
+      <div class="cat">AirPods Pro</div>
+      <h2>Hearing aid.<br>And so much more.</h2>
+      <div class="tagline">Now with clinical-grade Hearing Aid.</div>
+    </div>
+    <div>
+      <div class="product-emoji">🎧</div>
+      <div class="card-links">
+        <a href="#" class="card-link">Learn more</a>
+        <a href="#" class="card-link">Buy</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card span2" style="background: #000; flex-direction: row; text-align: left; gap: 24px; align-items: center; padding: 40px 36px;">
+    <div style="flex:1;">
+      <div class="cat" style="color:#a1a1a6;">Apple Vision Pro</div>
+      <h2 style="color:#f5f5f7; font-size:36px;">Welcome to<br>spatial computing.</h2>
+      <div class="tagline" style="color:#a1a1a6; margin-bottom:16px;">visionOS 2. More apps than ever.</div>
+      <div class="card-links" style="justify-content: flex-start;">
+        <a href="#" class="card-link light">Learn more</a>
+        <a href="#" class="card-link light">Buy</a>
+      </div>
+    </div>
+    <div style="font-size:80px; flex-shrink:0;">🥽</div>
+  </div>
+</section>
+
+<section class="marquee-section">
+  <h2>Apple Intelligence.</h2>
+  <p>Personal. Private. Powerful.</p>
+  <div class="feature-chips">
+    <div class="feature-chip">Writing Tools</div>
+    <div class="feature-chip">Image Playground</div>
+    <div class="feature-chip">Genmoji</div>
+    <div class="feature-chip">Siri with ChatGPT</div>
+    <div class="feature-chip">Smart Reply</div>
+    <div class="feature-chip">Priority Notifications</div>
+    <div class="feature-chip">Photo Cleanup</div>
+    <div class="feature-chip">Memory Movies</div>
+  </div>
+</section>
+
+<section class="accessories">
+  <h2>Accessories</h2>
+  <div class="acc-row">
+    <div class="acc-card"><div class="acc-emoji">🎮</div><div class="acc-name">Game Controller</div><div class="acc-price">From $69</div></div>
+    <div class="acc-card"><div class="acc-emoji">⌨️</div><div class="acc-name">Magic Keyboard</div><div class="acc-price">From $99</div></div>
+    <div class="acc-card"><div class="acc-emoji">🖱️</div><div class="acc-name">Magic Mouse</div><div class="acc-price">$79</div></div>
+    <div class="acc-card"><div class="acc-emoji">🔌</div><div class="acc-name">MagSafe Charger</div><div class="acc-price">From $39</div></div>
+    <div class="acc-card"><div class="acc-emoji">📡</div><div class="acc-name">AirTag</div><div class="acc-price">$29</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    1. All battery claims depend on network configuration and many other factors; actual results will vary. iPhone 17 Pro battery life testing conducted by Apple in September 2025.
+  </div>
+  <div class="footer-links">
+    <div class="footer-col">
+      <h4>Shop and Learn</h4>
+      <a href="#">Store</a><a href="#">Mac</a><a href="#">iPad</a><a href="#">iPhone</a><a href="#">Watch</a><a href="#">Vision</a><a href="#">AirPods</a><a href="#">TV &amp; Home</a>
+    </div>
+    <div class="footer-col">
+      <h4>Apple Wallet</h4>
+      <a href="#">Wallet</a><a href="#">Apple Card</a><a href="#">Apple Pay</a><a href="#">Apple Cash</a>
+    </div>
+    <div class="footer-col">
+      <h4>Account</h4>
+      <a href="#">Manage Your Apple Account</a><a href="#">Apple Store Account</a><a href="#">iCloud.com</a>
+    </div>
+    <div class="footer-col">
+      <h4>Entertainment</h4>
+      <a href="#">Apple One</a><a href="#">Apple TV+</a><a href="#">Apple Music</a><a href="#">Apple Arcade</a><a href="#">Apple Fitness+</a>
+    </div>
+    <div class="footer-col">
+      <h4>Apple Store</h4>
+      <a href="#">Find a Store</a><a href="#">Genius Bar</a><a href="#">Today at Apple</a><a href="#">Apple Summer Camp</a><a href="#">Apple Store App</a>
+    </div>
+    <div class="footer-col">
+      <h4>For Business</h4>
+      <a href="#">Apple and Business</a><a href="#">Shop for Business</a>
+    </div>
+    <div class="footer-col">
+      <h4>For Education</h4>
+      <a href="#">Apple and Education</a><a href="#">Shop for K-12</a><a href="#">Shop for College</a>
+    </div>
+    <div class="footer-col">
+      <h4>For Healthcare</h4>
+      <a href="#">Apple in Healthcare</a><a href="#">Health on Apple Watch</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Use</a>
+    <a href="#">Sales and Refunds</a>
+    <a href="#">Legal</a>
+    <a href="#">Site Map</a>
+    <span>Copyright © 2025 Apple Inc. All rights reserved.</span>
+  </div>
+</footer>
+
+</body>
+</html>
